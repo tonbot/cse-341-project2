@@ -1,0 +1,102 @@
+@baseUrl = http://localhost:3000
+@publishedBaseUrl = https://your-render-service.onrender.com
+@authorId = 69bbcff200df8cdba20a2372
+@bookId = 65f2d87159a6ce95c7bc5678
+
+### Home
+GET {{baseUrl}}/
+Content-Type: application/json
+
+### Get all authors
+GET {{baseUrl}}/authors
+Content-Type: application/json
+
+### Get single author
+GET {{baseUrl}}/authors/{{authorId}}
+Content-Type: application/json
+
+### Create author
+POST {{baseUrl}}/authors
+Content-Type: application/json
+
+{
+  "firstName": "Chimamanda",
+  "lastName": "Adichie",
+  "nationality": "Nigerian",
+  "birthYear": 1977,
+  "favoriteGenre": "Fiction",
+  "isAwardWinner": true
+}
+
+### Update author
+PUT {{baseUrl}}/authors/{{authorId}}
+Content-Type: application/json
+
+{
+  "firstName": "Chimamanda",
+  "lastName": "Adichie",
+  "nationality": "Nigerian",
+  "birthYear": 1977,
+  "favoriteGenre": "Literary Fiction",
+  "isAwardWinner": true
+}
+
+### Delete author
+DELETE {{baseUrl}}/authors/{{authorId}}
+Content-Type: application/json
+
+### Get all books
+GET {{baseUrl}}/books
+Content-Type: application/json
+
+### Get single book
+GET {{baseUrl}}/books/{{bookId}}
+Content-Type: application/json
+
+### Create book
+POST {{baseUrl}}/books
+Content-Type: application/json
+
+{
+  "title": "Purple Hibiscus",
+  "authorName": "Chimamanda Adichie",
+  "genre": "Fiction",
+  "publishedYear": 2003,
+  "pageCount": 307,
+  "rating": 4.8,
+  "isAvailable": true,
+  "format": "Paperback",
+  "summary": "A coming-of-age novel about family, freedom, and identity."
+}
+
+### Update book
+PUT {{baseUrl}}/books/{{bookId}}
+Content-Type: application/json
+
+{
+  "title": "Purple Hibiscus",
+  "authorName": "Chimamanda Adichie",
+  "genre": "Fiction",
+  "publishedYear": 2003,
+  "pageCount": 307,
+  "rating": 4.9,
+  "isAvailable": false,
+  "format": "Hardcover",
+  "summary": "A coming-of-age novel about family, freedom, and identity in Nigeria."
+}
+
+### Delete book
+DELETE {{baseUrl}}/books/{{bookId}}
+Content-Type: application/json
+
+### Local Swagger UI
+GET {{baseUrl}}/api-docs
+Content-Type: application/json
+
+### Local Swagger JSON
+GET {{baseUrl}}/api-docs.json
+Content-Type: application/json
+
+### Published Swagger UI
+GET {{publishedBaseUrl}}/api-docs
+Content-Type: application/json

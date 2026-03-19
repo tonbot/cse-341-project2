@@ -1,0 +1,684 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Library API",
+    "version": "1.0.0",
+    "description": "Swagger documentation for the CSE 341 Project 2 Library API."
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Local development server"
+    },
+    {
+      "url": "https://your-render-service.onrender.com",
+      "description": "Published Render API"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Authors",
+      "description": "Create, read, update, and delete authors"
+    },
+    {
+      "name": "Books",
+      "description": "Create, read, update, and delete books"
+    }
+  ],
+  "paths": {
+    "/": {
+      "get": {
+        "summary": "Check that the Library API is running",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "API welcome message",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": {
+                    "message": "Library API is running"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/authors/": {
+      "get": {
+        "tags": [
+          "Authors"
+        ],
+        "summary": "Get all authors",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "A list of authors",
+            "content": {
+              "application/json": {
+                "schema": [
+                  {
+                    "$ref": "#/components/schemas/Author"
+                  }
+                ]
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Authors"
+        ],
+        "summary": "Create an author",
+        "description": "",
+        "responses": {
+          "201": {
+            "description": "Author created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreatedDocument"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthorInput"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/authors/{id}": {
+      "get": {
+        "tags": [
+          "Authors"
+        ],
+        "summary": "Get one author by id",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "MongoDB ObjectId for the author"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The requested author",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Author"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Author not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Authors"
+        ],
+        "summary": "Update an author by id",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "MongoDB ObjectId for the author"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Author updated successfully"
+          },
+          "400": {
+            "description": "Invalid id or body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Author not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthorInput"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Authors"
+        ],
+        "summary": "Delete an author by id",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "MongoDB ObjectId for the author"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Author deleted successfully"
+          },
+          "400": {
+            "description": "Invalid id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Author not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/books/": {
+      "get": {
+        "tags": [
+          "Books"
+        ],
+        "summary": "Get all books",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "A list of books",
+            "content": {
+              "application/json": {
+                "schema": [
+                  {
+                    "$ref": "#/components/schemas/Book"
+                  }
+                ]
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Books"
+        ],
+        "summary": "Create a book",
+        "description": "",
+        "responses": {
+          "201": {
+            "description": "Book created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreatedDocument"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BookInput"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/books/{id}": {
+      "get": {
+        "tags": [
+          "Books"
+        ],
+        "summary": "Get one book by id",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "MongoDB ObjectId for the book"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The requested book",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Book"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Book not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Books"
+        ],
+        "summary": "Update a book by id",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "MongoDB ObjectId for the book"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Book updated successfully"
+          },
+          "400": {
+            "description": "Invalid id or body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Book not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BookInput"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Books"
+        ],
+        "summary": "Delete a book by id",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "MongoDB ObjectId for the book"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Book deleted successfully"
+          },
+          "400": {
+            "description": "Invalid id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Book not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Author": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "example": "65f2d87159a6ce95c7bc1234"
+          },
+          "firstName": {
+            "type": "string",
+            "example": "Chimamanda"
+          },
+          "lastName": {
+            "type": "string",
+            "example": "Adichie"
+          },
+          "nationality": {
+            "type": "string",
+            "example": "Nigerian"
+          },
+          "birthYear": {
+            "type": "number",
+            "example": 1977
+          },
+          "favoriteGenre": {
+            "type": "string",
+            "example": "Fiction"
+          },
+          "isAwardWinner": {
+            "type": "boolean",
+            "example": true
+          }
+        }
+      },
+      "AuthorInput": {
+        "type": "object",
+        "properties": {
+          "firstName": {
+            "type": "string",
+            "example": "Chimamanda"
+          },
+          "lastName": {
+            "type": "string",
+            "example": "Adichie"
+          },
+          "nationality": {
+            "type": "string",
+            "example": "Nigerian"
+          },
+          "birthYear": {
+            "type": "number",
+            "example": 1977
+          },
+          "favoriteGenre": {
+            "type": "string",
+            "example": "Fiction"
+          },
+          "isAwardWinner": {
+            "type": "boolean",
+            "example": true
+          }
+        }
+      },
+      "Book": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "example": "65f2d87159a6ce95c7bc5678"
+          },
+          "title": {
+            "type": "string",
+            "example": "Purple Hibiscus"
+          },
+          "authorName": {
+            "type": "string",
+            "example": "Chimamanda Adichie"
+          },
+          "genre": {
+            "type": "string",
+            "example": "Fiction"
+          },
+          "publishedYear": {
+            "type": "number",
+            "example": 2003
+          },
+          "pageCount": {
+            "type": "number",
+            "example": 307
+          },
+          "rating": {
+            "type": "number",
+            "example": 4.8
+          },
+          "isAvailable": {
+            "type": "boolean",
+            "example": true
+          },
+          "format": {
+            "type": "string",
+            "example": "Paperback"
+          },
+          "summary": {
+            "type": "string",
+            "example": "A coming-of-age novel about family, freedom, and identity."
+          }
+        }
+      },
+      "BookInput": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "example": "Purple Hibiscus"
+          },
+          "authorName": {
+            "type": "string",
+            "example": "Chimamanda Adichie"
+          },
+          "genre": {
+            "type": "string",
+            "example": "Fiction"
+          },
+          "publishedYear": {
+            "type": "number",
+            "example": 2003
+          },
+          "pageCount": {
+            "type": "number",
+            "example": 307
+          },
+          "rating": {
+            "type": "number",
+            "example": 4.8
+          },
+          "isAvailable": {
+            "type": "boolean",
+            "example": true
+          },
+          "format": {
+            "type": "string",
+            "example": "Paperback"
+          },
+          "summary": {
+            "type": "string",
+            "example": "A coming-of-age novel about family, freedom, and identity."
+          }
+        }
+      },
+      "CreatedDocument": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "example": "65f2d87159a6ce95c7bc5678"
+          }
+        }
+      },
+      "ValidationError": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string",
+            "example": "Validation failed"
+          },
+          "details": {
+            "type": "array",
+            "example": [
+              "title is required"
+            ],
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string",
+            "example": "Unable to fetch books"
+          }
+        }
+      }
+    }
+  }
+}
