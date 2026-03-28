@@ -47,7 +47,8 @@
                       "login": "/auth/login",
                       "logout": "/auth/logout",
                       "status": "/auth/status",
-                      "me": "/auth/me"
+                      "me": "/auth/me",
+                      "protected": "/auth/protected"
                     }
                   }
                 }
@@ -164,6 +165,52 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/CurrentUserResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The request does not include a valid authenticated session",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthenticationError"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Authentication is not configured",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConfigError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/auth/protected": {
+      "get": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "View members-only library content",
+        "description": "This is an example protected GET route that can be viewed only after the user logs in successfully.",
+        "responses": {
+          "200": {
+            "description": "Protected content visible only to authenticated users",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProtectedContentResponse"
                 }
               }
             }
@@ -971,6 +1018,71 @@
                 "type": "string",
                 "example": "2026-03-28T10:00:00.000Z"
               }
+            }
+          }
+        }
+      },
+      "ProtectedContentResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "This members-only library content is available only after login."
+          },
+          "user": {
+            "type": "object",
+            "properties": {
+              "_id": {
+                "type": "string",
+                "example": "65f2d87159a6ce95c7bc9999"
+              },
+              "githubId": {
+                "type": "string",
+                "example": "123456789"
+              },
+              "username": {
+                "type": "string",
+                "example": "octocat"
+              },
+              "displayName": {
+                "type": "string",
+                "example": "The Octocat"
+              },
+              "email": {
+                "type": "string",
+                "example": "octocat@example.com"
+              },
+              "avatarUrl": {
+                "type": "string",
+                "example": "https://avatars.githubusercontent.com/u/583231?v=4"
+              },
+              "profileUrl": {
+                "type": "string",
+                "example": "https://github.com/octocat"
+              },
+              "provider": {
+                "type": "string",
+                "example": "github"
+              },
+              "createdAt": {
+                "type": "string",
+                "example": "2026-03-28T10:00:00.000Z"
+              },
+              "updatedAt": {
+                "type": "string",
+                "example": "2026-03-28T10:00:00.000Z"
+              }
+            }
+          },
+          "membersOnlyContent": {
+            "type": "array",
+            "example": [
+              "You can create, update, and delete authors.",
+              "You can create, update, and delete books.",
+              "You can access your authenticated profile details."
+            ],
+            "items": {
+              "type": "string"
             }
           }
         }

@@ -15,6 +15,10 @@ Content-Type: application/json
 GET {{baseUrl}}/auth/me
 Content-Type: application/json
 
+### Protected content (requires browser login first)
+GET {{baseUrl}}/auth/protected
+Content-Type: application/json
+
 ### Start GitHub login
 # Open this route in your browser so GitHub can redirect back with your session cookie.
 GET {{baseUrl}}/auth/login

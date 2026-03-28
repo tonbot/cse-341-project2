@@ -24,6 +24,18 @@ const getCurrentUser = (req, res) => {
   });
 };
 
+const getProtectedContent = (req, res) => {
+  res.status(200).json({
+    message: 'This members-only library content is available only after login.',
+    user: buildUserResponse(req.user),
+    membersOnlyContent: [
+      'You can create, update, and delete authors.',
+      'You can create, update, and delete books.',
+      'You can access your authenticated profile details.'
+    ]
+  });
+};
+
 const handleGithubCallback = (req, res) => {
   res.redirect('/api-docs');
 };
@@ -58,6 +70,7 @@ const logout = (req, res, next) => {
 module.exports = {
   getStatus,
   getCurrentUser,
+  getProtectedContent,
   handleGithubCallback,
   handleLoginFailure,
   logout

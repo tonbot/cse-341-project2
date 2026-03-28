@@ -6,8 +6,23 @@ const mongodb = require('../data/database');
 
 const REQUIRED_AUTH_ENV_VARS = ['GITHUB_CLIENT_ID', 'GITHUB_CLIENT_SECRET', 'SESSION_SECRET'];
 
+const isUnsetConfigValue = (value) => {
+  if (!value) {
+    return true;
+  }
+
+  const normalizedValue = value.trim().toLowerCase();
+
+  return (
+    normalizedValue.length === 0 ||
+    normalizedValue.includes('replace-with') ||
+    normalizedValue.includes('your-github') ||
+    normalizedValue.includes('<')
+  );
+};
+
 const getMissingAuthConfig = () =>
-  REQUIRED_AUTH_ENV_VARS.filter((variableName) => !process.env[variableName]);
+  REQUIRED_AUTH_ENV_VARS.filter((variableName) => isUnsetConfigValue(process.env[variableName]));
 
 const isAuthConfigured = () => getMissingAuthConfig().length === 0;
 

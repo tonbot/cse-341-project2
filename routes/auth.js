@@ -140,6 +140,50 @@ router.get(
 );
 
 router.get(
+  '/protected',
+  /*
+    #swagger.tags = ['Auth']
+    #swagger.summary = 'View members-only library content'
+    #swagger.description = 'This is an example protected GET route that can be viewed only after the user logs in successfully.'
+    #swagger.security = [{
+      "cookieAuth": []
+    }]
+    #swagger.responses[200] = {
+      description: 'Protected content visible only to authenticated users',
+      content: {
+        "application/json": {
+          schema: {
+            $ref: '#/components/schemas/ProtectedContentResponse'
+          }
+        }
+      }
+    }
+    #swagger.responses[401] = {
+      description: 'The request does not include a valid authenticated session',
+      content: {
+        "application/json": {
+          schema: {
+            $ref: '#/components/schemas/AuthenticationError'
+          }
+        }
+      }
+    }
+    #swagger.responses[503] = {
+      description: 'Authentication is not configured',
+      content: {
+        "application/json": {
+          schema: {
+            $ref: '#/components/schemas/ConfigError'
+          }
+        }
+      }
+    }
+  */
+  ensureAuthenticated,
+  authController.getProtectedContent
+);
+
+router.get(
   '/logout',
   /*
     #swagger.tags = ['Auth']

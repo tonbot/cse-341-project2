@@ -90,6 +90,26 @@ const doc = {
           updatedAt: '2026-03-28T10:00:00.000Z'
         }
       },
+      ProtectedContentResponse: {
+        message: 'This members-only library content is available only after login.',
+        user: {
+          _id: '65f2d87159a6ce95c7bc9999',
+          githubId: '123456789',
+          username: 'octocat',
+          displayName: 'The Octocat',
+          email: 'octocat@example.com',
+          avatarUrl: 'https://avatars.githubusercontent.com/u/583231?v=4',
+          profileUrl: 'https://github.com/octocat',
+          provider: 'github',
+          createdAt: '2026-03-28T10:00:00.000Z',
+          updatedAt: '2026-03-28T10:00:00.000Z'
+        },
+        membersOnlyContent: [
+          'You can create, update, and delete authors.',
+          'You can create, update, and delete books.',
+          'You can access your authenticated profile details.'
+        ]
+      },
       Author: {
         _id: '65f2d87159a6ce95c7bc1234',
         firstName: 'Chimamanda',

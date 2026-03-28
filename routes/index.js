@@ -16,7 +16,8 @@ router.get(
                 login: '/auth/login',
                 logout: '/auth/logout',
                 status: '/auth/status',
-                me: '/auth/me'
+                me: '/auth/me',
+                protected: '/auth/protected'
               }
             }
           }
@@ -32,7 +33,8 @@ router.get(
         login: '/auth/login',
         logout: '/auth/logout',
         status: '/auth/status',
-        me: '/auth/me'
+        me: '/auth/me',
+        protected: '/auth/protected'
       }
     });
   }
