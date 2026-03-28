@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const booksController = require('../controllers/books');
+const { ensureAuthenticated } = require('../middleware/auth');
 
 router.get(
   '/',
@@ -37,6 +38,9 @@ router.post(
   /*
     #swagger.tags = ['Books']
     #swagger.summary = 'Create a book'
+    #swagger.security = [{
+      "cookieAuth": []
+    }]
     #swagger.requestBody = {
       required: true,
       content: {
@@ -67,7 +71,28 @@ router.post(
         }
       }
     }
+    #swagger.responses[401] = {
+      description: 'The request does not include a valid authenticated session',
+      content: {
+        "application/json": {
+          schema: {
+            $ref: '#/components/schemas/AuthenticationError'
+          }
+        }
+      }
+    }
+    #swagger.responses[503] = {
+      description: 'Authentication is not configured',
+      content: {
+        "application/json": {
+          schema: {
+            $ref: '#/components/schemas/ConfigError'
+          }
+        }
+      }
+    }
   */
+  ensureAuthenticated,
   booksController.createBook
 );
 
@@ -121,6 +146,9 @@ router.put(
   /*
     #swagger.tags = ['Books']
     #swagger.summary = 'Update a book by id'
+    #swagger.security = [{
+      "cookieAuth": []
+    }]
     #swagger.parameters['id'] = {
       in: 'path',
       description: 'MongoDB ObjectId for the book',
@@ -160,7 +188,28 @@ router.put(
         }
       }
     }
+    #swagger.responses[401] = {
+      description: 'The request does not include a valid authenticated session',
+      content: {
+        "application/json": {
+          schema: {
+            $ref: '#/components/schemas/AuthenticationError'
+          }
+        }
+      }
+    }
+    #swagger.responses[503] = {
+      description: 'Authentication is not configured',
+      content: {
+        "application/json": {
+          schema: {
+            $ref: '#/components/schemas/ConfigError'
+          }
+        }
+      }
+    }
   */
+  ensureAuthenticated,
   booksController.updateBook
 );
 
@@ -169,6 +218,9 @@ router.delete(
   /*
     #swagger.tags = ['Books']
     #swagger.summary = 'Delete a book by id'
+    #swagger.security = [{
+      "cookieAuth": []
+    }]
     #swagger.parameters['id'] = {
       in: 'path',
       description: 'MongoDB ObjectId for the book',
@@ -198,7 +250,28 @@ router.delete(
         }
       }
     }
+    #swagger.responses[401] = {
+      description: 'The request does not include a valid authenticated session',
+      content: {
+        "application/json": {
+          schema: {
+            $ref: '#/components/schemas/AuthenticationError'
+          }
+        }
+      }
+    }
+    #swagger.responses[503] = {
+      description: 'Authentication is not configured',
+      content: {
+        "application/json": {
+          schema: {
+            $ref: '#/components/schemas/ConfigError'
+          }
+        }
+      }
+    }
   */
+  ensureAuthenticated,
   booksController.deleteBook
 );
 

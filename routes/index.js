@@ -10,7 +10,14 @@ router.get(
         "application/json": {
           schema: {
             example: {
-              message: 'Library API is running'
+              message: 'Library API is running',
+              docs: '/api-docs',
+              auth: {
+                login: '/auth/login',
+                logout: '/auth/logout',
+                status: '/auth/status',
+                me: '/auth/me'
+              }
             }
           }
         }
@@ -18,10 +25,20 @@ router.get(
     }
   */
   (req, res) => {
-    res.status(200).json({ message: 'Library API is running' });
+    res.status(200).json({
+      message: 'Library API is running',
+      docs: '/api-docs',
+      auth: {
+        login: '/auth/login',
+        logout: '/auth/logout',
+        status: '/auth/status',
+        me: '/auth/me'
+      }
+    });
   }
 );
 
+router.use('/auth', require('./auth'));
 router.use('/authors', require('./authors'));
 router.use('/books', require('./books'));
 

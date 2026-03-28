@@ -7,6 +7,22 @@
 GET {{baseUrl}}/
 Content-Type: application/json
 
+### Auth status
+GET {{baseUrl}}/auth/status
+Content-Type: application/json
+
+### Current user (requires browser login first)
+GET {{baseUrl}}/auth/me
+Content-Type: application/json
+
+### Start GitHub login
+# Open this route in your browser so GitHub can redirect back with your session cookie.
+GET {{baseUrl}}/auth/login
+
+### Log out current user
+GET {{baseUrl}}/auth/logout
+Content-Type: application/json
+
 ### Get all authors
 GET {{baseUrl}}/authors
 Content-Type: application/json

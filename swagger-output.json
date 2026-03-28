@@ -17,6 +17,10 @@
   ],
   "tags": [
     {
+      "name": "Auth",
+      "description": "GitHub OAuth login and session-based authentication"
+    },
+    {
       "name": "Authors",
       "description": "Create, read, update, and delete authors"
     },
@@ -37,7 +41,176 @@
               "application/json": {
                 "schema": {
                   "example": {
-                    "message": "Library API is running"
+                    "message": "Library API is running",
+                    "docs": "/api-docs",
+                    "auth": {
+                      "login": "/auth/login",
+                      "logout": "/auth/logout",
+                      "status": "/auth/status",
+                      "me": "/auth/me"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "get": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Start the GitHub OAuth login flow",
+        "description": "Open this route in the browser to sign in with GitHub. On the first successful login, the API creates a user document in MongoDB and then redirects back to /api-docs with a session cookie for protected routes.",
+        "responses": {
+          "302": {
+            "description": "Redirects the browser to GitHub for authentication"
+          },
+          "503": {
+            "description": "Authentication is not configured",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConfigError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/github/callback": {
+      "get": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "GitHub OAuth callback",
+        "description": "GitHub redirects back to this route after the user approves login.",
+        "responses": {
+          "302": {
+            "description": "Redirects to Swagger UI after successful authentication"
+          },
+          "401": {
+            "description": "GitHub login failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthenticationError"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service Unavailable"
+          }
+        }
+      }
+    },
+    "/auth/login-failed": {
+      "get": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "GitHub login failure response",
+        "description": "",
+        "responses": {
+          "401": {
+            "description": "GitHub login failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthenticationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/status": {
+      "get": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Check the current authentication status",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "Authentication status and current user when logged in",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthStatus"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/me": {
+      "get": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Get the currently authenticated user",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "The current logged-in user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CurrentUserResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The request does not include a valid authenticated session",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthenticationError"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Authentication is not configured",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConfigError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/auth/logout": {
+      "get": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Log out the current user",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "The session has been cleared",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": {
+                    "message": "Logged out successfully"
                   }
                 }
               }
@@ -105,10 +278,35 @@
               }
             }
           },
+          "401": {
+            "description": "The request does not include a valid authenticated session",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthenticationError"
+                }
+              }
+            }
+          },
           "500": {
             "description": "Internal Server Error"
+          },
+          "503": {
+            "description": "Authentication is not configured",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConfigError"
+                }
+              }
+            }
           }
         },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -203,6 +401,16 @@
               }
             }
           },
+          "401": {
+            "description": "The request does not include a valid authenticated session",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthenticationError"
+                }
+              }
+            }
+          },
           "404": {
             "description": "Author not found",
             "content": {
@@ -212,8 +420,23 @@
                 }
               }
             }
+          },
+          "503": {
+            "description": "Authentication is not configured",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConfigError"
+                }
+              }
+            }
           }
         },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -256,6 +479,16 @@
               }
             }
           },
+          "401": {
+            "description": "The request does not include a valid authenticated session",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthenticationError"
+                }
+              }
+            }
+          },
           "404": {
             "description": "Author not found",
             "content": {
@@ -265,8 +498,23 @@
                 }
               }
             }
+          },
+          "503": {
+            "description": "Authentication is not configured",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConfigError"
+                }
+              }
+            }
           }
-        }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
       }
     },
     "/books/": {
@@ -328,10 +576,35 @@
               }
             }
           },
+          "401": {
+            "description": "The request does not include a valid authenticated session",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthenticationError"
+                }
+              }
+            }
+          },
           "500": {
             "description": "Internal Server Error"
+          },
+          "503": {
+            "description": "Authentication is not configured",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConfigError"
+                }
+              }
+            }
           }
         },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -426,6 +699,16 @@
               }
             }
           },
+          "401": {
+            "description": "The request does not include a valid authenticated session",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthenticationError"
+                }
+              }
+            }
+          },
           "404": {
             "description": "Book not found",
             "content": {
@@ -435,8 +718,23 @@
                 }
               }
             }
+          },
+          "503": {
+            "description": "Authentication is not configured",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConfigError"
+                }
+              }
+            }
           }
         },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -479,6 +777,16 @@
               }
             }
           },
+          "401": {
+            "description": "The request does not include a valid authenticated session",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthenticationError"
+                }
+              }
+            }
+          },
           "404": {
             "description": "Book not found",
             "content": {
@@ -488,13 +796,185 @@
                 }
               }
             }
+          },
+          "503": {
+            "description": "Authentication is not configured",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConfigError"
+                }
+              }
+            }
           }
-        }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
       }
     }
   },
   "components": {
+    "securitySchemes": {
+      "cookieAuth": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "connect.sid",
+        "description": "Session cookie created after a successful GitHub OAuth login at /auth/login."
+      }
+    },
     "schemas": {
+      "UserProfile": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "example": "65f2d87159a6ce95c7bc9999"
+          },
+          "githubId": {
+            "type": "string",
+            "example": "123456789"
+          },
+          "username": {
+            "type": "string",
+            "example": "octocat"
+          },
+          "displayName": {
+            "type": "string",
+            "example": "The Octocat"
+          },
+          "email": {
+            "type": "string",
+            "example": "octocat@example.com"
+          },
+          "avatarUrl": {
+            "type": "string",
+            "example": "https://avatars.githubusercontent.com/u/583231?v=4"
+          },
+          "profileUrl": {
+            "type": "string",
+            "example": "https://github.com/octocat"
+          },
+          "provider": {
+            "type": "string",
+            "example": "github"
+          },
+          "createdAt": {
+            "type": "string",
+            "example": "2026-03-28T10:00:00.000Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "example": "2026-03-28T10:00:00.000Z"
+          }
+        }
+      },
+      "AuthStatus": {
+        "type": "object",
+        "properties": {
+          "isAuthenticated": {
+            "type": "boolean",
+            "example": true
+          },
+          "user": {
+            "type": "object",
+            "properties": {
+              "_id": {
+                "type": "string",
+                "example": "65f2d87159a6ce95c7bc9999"
+              },
+              "githubId": {
+                "type": "string",
+                "example": "123456789"
+              },
+              "username": {
+                "type": "string",
+                "example": "octocat"
+              },
+              "displayName": {
+                "type": "string",
+                "example": "The Octocat"
+              },
+              "email": {
+                "type": "string",
+                "example": "octocat@example.com"
+              },
+              "avatarUrl": {
+                "type": "string",
+                "example": "https://avatars.githubusercontent.com/u/583231?v=4"
+              },
+              "profileUrl": {
+                "type": "string",
+                "example": "https://github.com/octocat"
+              },
+              "provider": {
+                "type": "string",
+                "example": "github"
+              },
+              "createdAt": {
+                "type": "string",
+                "example": "2026-03-28T10:00:00.000Z"
+              },
+              "updatedAt": {
+                "type": "string",
+                "example": "2026-03-28T10:00:00.000Z"
+              }
+            }
+          }
+        }
+      },
+      "CurrentUserResponse": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "type": "object",
+            "properties": {
+              "_id": {
+                "type": "string",
+                "example": "65f2d87159a6ce95c7bc9999"
+              },
+              "githubId": {
+                "type": "string",
+                "example": "123456789"
+              },
+              "username": {
+                "type": "string",
+                "example": "octocat"
+              },
+              "displayName": {
+                "type": "string",
+                "example": "The Octocat"
+              },
+              "email": {
+                "type": "string",
+                "example": "octocat@example.com"
+              },
+              "avatarUrl": {
+                "type": "string",
+                "example": "https://avatars.githubusercontent.com/u/583231?v=4"
+              },
+              "profileUrl": {
+                "type": "string",
+                "example": "https://github.com/octocat"
+              },
+              "provider": {
+                "type": "string",
+                "example": "github"
+              },
+              "createdAt": {
+                "type": "string",
+                "example": "2026-03-28T10:00:00.000Z"
+              },
+              "updatedAt": {
+                "type": "string",
+                "example": "2026-03-28T10:00:00.000Z"
+              }
+            }
+          }
+        }
+      },
       "Author": {
         "type": "object",
         "properties": {
@@ -663,6 +1143,35 @@
             "type": "array",
             "example": [
               "title is required"
+            ],
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "AuthenticationError": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string",
+            "example": "Authentication required"
+          }
+        }
+      },
+      "ConfigError": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string",
+            "example": "Authentication is not configured"
+          },
+          "details": {
+            "type": "array",
+            "example": [
+              "GITHUB_CLIENT_ID is required",
+              "GITHUB_CLIENT_SECRET is required",
+              "SESSION_SECRET is required"
             ],
             "items": {
               "type": "string"

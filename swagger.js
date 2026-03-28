@@ -26,6 +26,10 @@ const doc = {
   ],
   tags: [
     {
+      name: 'Auth',
+      description: 'GitHub OAuth login and session-based authentication'
+    },
+    {
       name: 'Authors',
       description: 'Create, read, update, and delete authors'
     },
@@ -35,7 +39,57 @@ const doc = {
     }
   ],
   components: {
+    securitySchemes: {
+      cookieAuth: {
+        type: 'apiKey',
+        in: 'cookie',
+        name: 'connect.sid',
+        description:
+          'Session cookie created after a successful GitHub OAuth login at /auth/login.'
+      }
+    },
     schemas: {
+      UserProfile: {
+        _id: '65f2d87159a6ce95c7bc9999',
+        githubId: '123456789',
+        username: 'octocat',
+        displayName: 'The Octocat',
+        email: 'octocat@example.com',
+        avatarUrl: 'https://avatars.githubusercontent.com/u/583231?v=4',
+        profileUrl: 'https://github.com/octocat',
+        provider: 'github',
+        createdAt: '2026-03-28T10:00:00.000Z',
+        updatedAt: '2026-03-28T10:00:00.000Z'
+      },
+      AuthStatus: {
+        isAuthenticated: true,
+        user: {
+          _id: '65f2d87159a6ce95c7bc9999',
+          githubId: '123456789',
+          username: 'octocat',
+          displayName: 'The Octocat',
+          email: 'octocat@example.com',
+          avatarUrl: 'https://avatars.githubusercontent.com/u/583231?v=4',
+          profileUrl: 'https://github.com/octocat',
+          provider: 'github',
+          createdAt: '2026-03-28T10:00:00.000Z',
+          updatedAt: '2026-03-28T10:00:00.000Z'
+        }
+      },
+      CurrentUserResponse: {
+        user: {
+          _id: '65f2d87159a6ce95c7bc9999',
+          githubId: '123456789',
+          username: 'octocat',
+          displayName: 'The Octocat',
+          email: 'octocat@example.com',
+          avatarUrl: 'https://avatars.githubusercontent.com/u/583231?v=4',
+          profileUrl: 'https://github.com/octocat',
+          provider: 'github',
+          createdAt: '2026-03-28T10:00:00.000Z',
+          updatedAt: '2026-03-28T10:00:00.000Z'
+        }
+      },
       Author: {
         _id: '65f2d87159a6ce95c7bc1234',
         firstName: 'Chimamanda',
@@ -82,6 +136,17 @@ const doc = {
       ValidationError: {
         error: 'Validation failed',
         details: ['title is required']
+      },
+      AuthenticationError: {
+        error: 'Authentication required'
+      },
+      ConfigError: {
+        error: 'Authentication is not configured',
+        details: [
+          'GITHUB_CLIENT_ID is required',
+          'GITHUB_CLIENT_SECRET is required',
+          'SESSION_SECRET is required'
+        ]
       },
       Error: {
         error: 'Unable to fetch books'
