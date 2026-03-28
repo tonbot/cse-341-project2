@@ -49,6 +49,60 @@
                       "status": "/auth/status",
                       "me": "/auth/me",
                       "protected": "/auth/protected"
+                    },
+                    "authentication": {
+                      "isConfigured": true,
+                      "missingConfig": [],
+                      "isLoggedIn": false,
+                      "user": null,
+                      "nextStep": "Open /auth/login in a browser to sign in with GitHub."
+                    },
+                    "currentAccess": {
+                      "can": [
+                        "View API documentation.",
+                        "Read all authors.",
+                        "Read all books.",
+                        "Check authentication status.",
+                        "Start the GitHub login flow."
+                      ],
+                      "cannot": [
+                        "View the authenticated user profile.",
+                        "View members-only library content.",
+                        "Create, update, or delete authors.",
+                        "Create, update, or delete books.",
+                        "Log out of an authenticated session."
+                      ]
+                    },
+                    "permissionsSummary": {
+                      "ifLoggedOut": {
+                        "can": [
+                          "View API documentation.",
+                          "Read all authors.",
+                          "Read all books.",
+                          "Check authentication status.",
+                          "Start the GitHub login flow."
+                        ],
+                        "cannot": [
+                          "View the authenticated user profile.",
+                          "View members-only library content.",
+                          "Create, update, or delete authors.",
+                          "Create, update, or delete books.",
+                          "Log out of an authenticated session."
+                        ]
+                      },
+                      "ifLoggedIn": {
+                        "can": [
+                          "View API documentation.",
+                          "Read all authors.",
+                          "Read all books.",
+                          "View the authenticated user profile.",
+                          "View members-only library content.",
+                          "Create, update, or delete authors.",
+                          "Create, update, or delete books.",
+                          "Log out successfully."
+                        ],
+                        "cannot": []
+                      }
                     }
                   }
                 }
